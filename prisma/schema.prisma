@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Property listing model based on RESO standards
+model Property {
+  id                String   @id @default(uuid())
+  mlsNumber         String   @unique @map("mls_number")
+  streetAddress     String   @map("street_address")
+  city              String
+  state             String
+  zipCode           String   @map("zip_code")
+  propertyType      String   @map("property_type")
+  listPrice         Float    @map("list_price")
+  bedrooms          Int?
+  bathrooms         Float?
+  squareFeet        Int?     @map("square_feet")
+  lotSize           Float?   @map("lot_size")
+  yearBuilt         Int?     @map("year_built")
+  description       String?  @db.Text
+  photos            String[] // URLs to photos
+  status            String   // Active, Pending, Sold, etc.
+  listingDate       DateTime @map("listing_date")
+  lastUpdated       DateTime @map("last_updated") @updatedAt
+  createdAt         DateTime @map("created_at") @default(now())
+  
+  // RESO specific fields
+  mlsId             String   @map("mls_id")
+  mlsStatus         String   @map("mls_status")
+  standardStatus    String   @map("standard_status")
+  propertySubType   String?  @map("property_sub_type")
+  listingId         String   @map("listing_id")
+  daysOnMarket      Int?     @map("days_on_market")
+  taxId             String?  @map("tax_id")
+  virtualTourUrl    String?  @map("virtual_tour_url")
+  
+  // Coordinates for mapping
+  latitude          Float?
+  longitude         Float?
+
+  @@map("properties")
+} 
